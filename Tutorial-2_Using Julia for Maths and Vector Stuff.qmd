@@ -28,7 +28,7 @@ This document covers the following:
 
 There is also a section at the end with some "Quick tips".
 
-## Basic Maths
+## Basic Maths {#sec-basic-maths}
 
 As you probably can guess, the REPL is an interface onto a large calculator.  Julia does all the things R does... and you can find the basic maths operations defined [The Julia Manual](https://docs.julialang.org/en/v1/manual/mathematical-operations/index.html)
 
@@ -57,16 +57,18 @@ x
 x*10
 ```
 
-## Getting Help
+## Getting Help {#sec-getting-help}
 
 Before we move on, lets talk about the help files and how to access them. As in R, the help files assiocated with a given package, function or command can be accessed using `?` followed by the function name (e.g. type `? pi` in the REPL).
 
 Similar to when you entered Julia's package manager (using `]`) you'll notice that the `?` command causes a change in the REPL with `help?> `replacing `julia>` as the prompt. This informs you that you've entered the help mode. As an exercise, use the help mode to find the difference between `print` and `println`.
 
 ## Preamble to Objects like scalars, vectors and arrays
+
 Before we start creating arrays and matrices, we'd like to demonstrate how you allocate numbers and strings to objects in Julia and check an object's type. We'd also like to highlight some simple mathematical operations.
 
 ### Allocating data to objects
+
 Allocating in Julia is useful as it means that variables can be stored and used elsewhere. You allocate numbers to objects using the following:
 
 First note that we use the `=` in `Julia`, not the `<-` as in R.
@@ -105,7 +107,7 @@ You can also assign multiple values to separate variables in a concise manner.  
 αi, βi, γi
 ```
 
-#### Allocating strings...
+#### Allocating strings
 
 Of course you can also allocate strings of text to objects.  You must use the `""` and not `''` to define strings.
 
@@ -135,7 +137,7 @@ pi_custom = Float64(3.141592)
 
 For those of you that are interested, a floating-point object (a Float) is a number that has a decimal place. An Int object is an integer, a number without a decimal place, whereas an Irrational object is a specific type of Float used only for representing some irrational numbers of special significance (e.g. π and γ). The 64 purely refers to 64-bit which is the type of processor your computer uses, most modern computers are 64-bit.
 
-Occaisionally it will be valuable to convert an object from one type to another.  For example, `n` is currently an Integer (Int64), and we might want it to be Float (Float64).  To be clear, this is a distinction between `5` and `5.0`!
+Occasionally it will be valuable to convert an object from one type to another.  For example, `n` is currently an Integer (Int64), and we might want it to be Float (Float64).  To be clear, this is a distinction between `5` and `5.0`!
 
 ```{julia}
 typeof(n)
@@ -148,7 +150,7 @@ typeof(n2)
 
 ## Understanding Arrays, Vectors and Sequences.
 
-As you saw above, we created a sequence of numbers using `collect(0:1:10)`. Let's look at what type of obect this is:
+As you saw above, we created a sequence of numbers using `collect(0:1:10)`. Let's look at what type of object this is:
 
 ```{julia}
 typeof(x)
@@ -185,9 +187,9 @@ collect(x_array1)
 
 ## Indices if Arrays.
 
-You should recall from **R** that values in arrays and vectors and dataframes have _addresses_ that we call indices.  Julia works with indexing very similarly.
+You should recall from **R** that values in arrays and vectors and dataframes have _addresses_ that we call indices. Julia works with indexing very similarly.
 
-Let's make a simple array of 5 numbers and another simple array of five words.  Note that the `[]` array function is a but like the `c()` function in **R**.
+Let's make a simple array of 5 numbers and another simple array of five words. Note that the `[]` array function is a but like the `c()` function in **R**.
 
 ```{julia}
 ar = [6,7,8,9,10]
@@ -220,7 +222,9 @@ Note this would be like using in R `ar[c(2,4)]`.
 
 ## Broadcasting: something VERY special
 
-Imagine that you want to apply a function, like a `log()` or `exp()` function, to an array.  We saw above that we can create a vector using `collect()` and multiply this by a scalar
+Broadcasting allows you to apply a function, like a `log()` or `exp()`, in an element-wise manner to an array (in other words apply the function to every element of an array).  
+
+We saw above that we can create a vector using `collect()` and multiply this by a scalar
 
 ```{julia}
 # sequences in a vector
@@ -237,7 +241,7 @@ x
 x*10
 ```
 
-You can work directly with arrays and pre-built functions to do things like this.  To do-so, we combine the function with the (dot) `.` operator.  Let's work with `x_array1` from above.  Note how broadcasting the function across the array returns a vector.
+You can work directly with arrays and pre-built functions to do things like this. To do-so, we combine the function with the (dot) `.` operator.  Let's work with `x_array1` from above.  Note how broadcasting the function across the array returns a vector.
 
 ```{julia}
 # Look at the help file for exp10
@@ -245,7 +249,7 @@ exp_array1 = exp10.(x_array1)
 ```
 
 ```{julia}
-# look at the help file for log - what is the defaul!?
+# look at the help file for log - what is the default!?
 log_array1 = log.(x_array1)
 ```
 
