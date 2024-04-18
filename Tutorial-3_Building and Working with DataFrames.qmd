@@ -34,7 +34,7 @@ Alternately, you can specify the data type for each column.
 dat1 = DataFrame(col1=Float64[], col2=Int64[], col3=Float64[])
 ```
 
-Of course, `col1` is not the only label you provide: variable names are super important and the conventions we use in **R** are also important here in **Julia**, e.g. `a.b` or `a_b` or `AaBa` but not `a b` (no spaces allowed).
+Of course, `col1` is not the only label you provide: variable names are super important and the conventions we use in **R** are also important here in **Julia**, e.g.  `a_b` or `AaBa` but not `a b` (no spaces allowed) or `a.b` (because the (dot) `.` functions as an operator).
 
 
 ```{julia}
@@ -44,10 +44,10 @@ dat2 = DataFrame(species=[], size=[], rate=[])
 
 ### Allocating or adding data to a data frame.
 
-To add data to a dataframe, we use the `push!` command.
+To add data to a dataframe, we use the `push!` (read as push bang) command.
 
 ```{julia}
-species = "D. magna"
+species = "D.magna"
 size = 2.2
 rate = 4.2
 ```
@@ -57,7 +57,7 @@ rate = 4.2
 push!(dat2, [species, size, rate])
 ```
 
-Of course, the `push!()` function can append data to the existing data frame.  It is worth noting that `push!` can only append one row at a time. But since Julia is so good with loops (compared to R), this will make adding data to a dataframe really easy, and we'll learn how to do this in the next tutorial.
+Of course, the `push!()` function can append data to the existing data frame.  It is worth noting that `push!` can only append one row at a time. But since Julia is so good with loops (compared to R), this will make adding data to a dataframe really easy, and we'll learn how to do this in the next tutorial. What makes the `!` (bang) function very useful is that you can append (or remove, with `pop!()`) items to an object without having to assign it.
 
 ```{julia}
 species2 = "D.pulex"

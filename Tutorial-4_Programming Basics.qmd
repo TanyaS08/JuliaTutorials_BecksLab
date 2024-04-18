@@ -11,12 +11,12 @@ title-block-banner: true
 
 ```{julia}
 #| echo: false
-using DataFrames, StatsPlots, Plots, Random
+using DataFrames, Plots, Random, StatsPlots
 ```
 
 This section of the tutorials introduces programming basics, including the art of simple functions, positional arguments, keyword arguments, loops, if-else-break usage and continue-while usage.
 
-It is important to note that if you have experience programming R, there is a major difference in Julia - the use of loops is very much advocated in Julia where as _vectorising_ loops is advocated in R.
+It is important to note that if you have experience programming R, there is a major difference in Julia - the use of loops is very much advocated in Julia where as *vectorising* loops is advocated in R.
 
 Basically, we write loops in Julia.  We try to avoid them in R, if we want speed.
 
@@ -34,7 +34,7 @@ Let's begin with a simple function - adding 2 to any number
 
 ```{julia}
 function plus_two(x)
-    return(x+2)
+    return x+2
 end
 ```
 
@@ -53,7 +53,7 @@ x_out
 
 ### Positional Arguments
 
-As in **R**, input variables for functions have a specified and fixed order unless they have a default value which is explictly specified. For instance, we can build a function that measures body weight on different planets, but defaults to estimating weight on earth with a gravitational force of 9.81:
+As in **R**, input variables for functions have a specified and fixed order unless they have a default value which is explicitly specified. For instance, we can build a function that measures body weight on different planets, but defaults to estimating weight on earth with a gravitational force of 9.81:
 
 ```{julia}
 function bodyweight(BW_earth, g = 9.81)
@@ -68,7 +68,7 @@ Note that the function is called bodyweight, it requires in the first position a
 bodyweight(75)
 ```
 
-Now, if we want to estimate they same bodyweight on Mars, where gravit is 3.72, you can specify the g-value.
+Now, if we want to estimate they same bodyweight on Mars, where gravity is 3.72, you can specify the g-value.
 
 ```{julia}
 bodyweight(75, 3.72)
@@ -110,7 +110,7 @@ Note that this DOES NOT work, because we've failed to define c. (and or b)
 key_word(1, 8, d=4)
 ```
 
-To redfine d, you'd need to define c and d.
+To redefine d, you'd need to define c and d.
 
 ```{julia}
 key_word(1, c = 8, d = 4)
@@ -139,7 +139,7 @@ for i in 1:1000
     for_test = rand((1,2)) 
     # push! and store for_test in I_array2
     # Julia is smart enough to do this iteratively
-    # you don't neccessarily have to index by `[i]` like you might do in R
+    # you don't necessarily have to index by `[i]` like you might do in R
     push!(I_array, for_test) 
 end
 ```
@@ -266,7 +266,7 @@ for j in 1:100
 end
 ```
 
-You'll notice that every statement requires it's own start )`for` and `end` points, and is indented as per Julia's requirements. `if` and `else` statements can be very useful when building experiments: for example we might want to stop simulating a network's dynamics if more than 50% of the species have gone extinct.
+You'll notice that every statement requires it's own set of `for` and `end` points, and is indented as per Julia's requirements. `if` and `else` statements can be very useful when building experiments: for example we might want to stop simulating a network's dynamics if more than 50% of the species have gone extinct.
 
 ### continue and while
 
@@ -309,7 +309,7 @@ global testval = 17
 # note that we started with j = 0!!!
 # justify a condition
 while(j<testval) 
-    println("$j is definitely less than $testval") # prints j until j < 30
+    println("$j is definitely less than $testval") # prints j until j < 17
     # step forward
     j += 1 # count
 end
@@ -348,7 +348,7 @@ A = 7
 B = zeros(1:10)
 ```
 
-Of course you cab be super literate and force a variable to be `global`
+Of course you can be super literate and force a variable to be `global`
 
 ```{julia}
 global(c = 7)
