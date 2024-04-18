@@ -15,23 +15,37 @@ This set of tutorials is designed to help you use an integrated coding tool, VSC
 
 It will cover four core objectives
 
-1. acquire/install the `Julia` programming language, the Integrated Development Environment called `VSCode`, and the `Bioenergetic Food Web Model` written in the Julia programming language.
-2. Learn how to work with `Julia` programming, from installing packages to understanding arithmetic and plotting and data frames
-3. Learn how to simulate a simple predator-prey (consumer-resource) model using the `DifferentialEquations` package in Julia
-4. Learn how to implement and use the multi-species `BioenergeticFoodWebModel` in Julia
+1.  acquire/install the `Julia` programming language, the Integrated Development Environment called `VSCode`, and the `Bioenergetic Food Web Model` written in the Julia programming language.
+2.  Learn how to work with `Julia` programming, from installing packages to understanding arithmetic and plotting and data frames
+3.  Learn how to simulate a simple predator-prey (consumer-resource) model using the `DifferentialEquations` package in Julia
+4.  Learn how to implement and use the multi-species `BioenergeticFoodWebModel` in Julia
 
 Having done these, you will then be introduced to further complexities and opportunities.
 
 ### Moving from R and RStudio to Julia and VSCode
 
-For users of **R** and **RStudio**, **VSCode** and **Julia** can be thought of as the same working team, i.e. **VSCode**/**RStudio** are the text editors that allow you to create a 'rich text' environment from which to run **Julia**/**R**. That being said that (as to be expected) there are a few differences in the workflow that it might be worth familiarising yourself with.
+For users of **R** and **RStudio**, **VSCode** and **Julia** can be thought of as the same working team, i.e. **VSCode**/**RStudio** are the text editors that allow you to create a 'rich text' environment from which to run **Julia**/**R**. That being said that (as to be expected) there are a few differences in the workflow that it might be worth familiarising yourself with. You can also keep @tbl-cheatsheet handy to help with getting over the first initial stumbling blocks.
 
-**RStudio** users might be familiar with the concept of working with projects (i.e. a way of 'containerising' your work within a specific directory), **Julia** works in a similar manner, but at a much more local level. Broadly a **Julia** project is much more localised in that any packages that are imported (installed) locally for that specific project, meaning that it is possible to have multiple versions of a package installed for different projects - which is very handy from a reproducibility perspective. The details of the packages (dependencies) that you install are recorded in the `Project.toml` and the `Manifest.toml` files. Note these files are machine generated and will update as you add or removed packages while you work so you don't need to worry too much about them but its good to know what they mean/do. For an **R** specific analogy these files can be thought as the equivalents of the `renv.lock` file from the `{renv}` package.
+**RStudio** users might be familiar with the concept of working with projects (i.e. a way of 'containerising' your work within a specific directory), **Julia** works in a similar manner. Broadly a **Julia** project is much more localised in that any packages that you use (install) are downloaded locally for that specific project, meaning that it is possible to have multiple versions of a package installed for different projects - which is very handy from a reproducibility perspective. The details of the packages (dependencies) that you install are recorded in the `Project.toml` and the `Manifest.toml` files, these files are machine generated and will update as you add or removed packages while you work so you don't need to worry too much about them but its good to know what they mean/do. For an **R** specific analogy these files can be thought as the equivalents of the `renv.lock` file from the `{renv}` package.
 
-The other thing to be aware of in **Julia** is the case of multiple dispatch, more specifically that it has a very strict type system that will affect the behaviour of a function. [This](https://www.moll.dev/projects/effective-multi-dispatch/) blog post provides a nice overview of the type system using pokemon types but the take-home message here is that it is important that you specify the correct type of an object (something that we will cover in Tutorial 2) and that often times when you run into an error it is because of that... This may seem annoying at first but it does mean that your code is much 'safer' because you won't (unknowingly) be converting and combining objects that are of different types unless you specifically specify it.
+The other thing to be aware of in **Julia** is multiple dispatch, more specifically that it has a very strict type system that will affect the behaviour of a function. [This](https://www.moll.dev/projects/effective-multi-dispatch/) blog post provides a nice overview of multiple dispatch using Pokemon types but the take-home message here is that it is important that you specify the correct type of an object (something that we will cover in Tutorial 2) and that often times when you run into an error it is because of that... This may seem annoying at first but it does mean that in the long run your code is much 'safer' because you won't (unknowingly) be converting and combining objects that are of different types unless you specifically specify it.
 
-> insert quick ref table here?
++-----------------------------------------------------------------------------------+-------------------------------+-------------------------+
+| action                                                                            | **R**                         | **Julia**               |
++===================================================================================+===============================+=========================+
+| install a package                                                                 | install.package(PACKAGE_NAME) | Pkg.add PACKAGE_NAME    |
+|                                                                                   |                               |                         |
+|                                                                                   |                               | `]` add PACKAGE_NAME    |
++-----------------------------------------------------------------------------------+-------------------------------+-------------------------+
+| call/import a package                                                             | library(PACKAGE_NAME)         | using PACKAGE_NAME      |
++-----------------------------------------------------------------------------------+-------------------------------+-------------------------+
+| resolving naming conflicts (functions from different packages with the same name) | PACKAGE_NAME::function()      | PACKAGE_NAME.function() |
++-----------------------------------------------------------------------------------+-------------------------------+-------------------------+
+| calling column from dataframe                                                     | df\$COL_NAME                  | df.COL_NAME             |
++-----------------------------------------------------------------------------------+-------------------------------+-------------------------+
+
+: A moving from **R** to **Julia** cheatsheet {#tbl-cheatsheet}
 
 ### How to use these tutorials
 
-The simple idea here is to make a Julia script and add the code in these tutorials to your scripts.  Make sure you annotate using the `#` symbol, as we do in R Scripts.  We suggest that You have a script associated with each section of the table of contents on the left.
+The simple idea here is to make a Julia script and add the code in these tutorials to your scripts. Make sure you annotate using the `#` symbol, as we do in R Scripts. We suggest that You have a script associated with each section of the table of contents on the left.
