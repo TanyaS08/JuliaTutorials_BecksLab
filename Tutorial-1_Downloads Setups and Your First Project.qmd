@@ -6,7 +6,7 @@ format:
     html:
         embed-resources: true
 title-block-banner: true
-jupyter: julia-1.8
+#jupyter: julia-1.8
 ---
 
 ```{julia}
@@ -31,7 +31,7 @@ Navigate to [this page](https://visualstudio.microsoft.com/) to download and ins
 
 ## Setting Up VSCode to use Julia
 
-VS Code is a free source-code editor, allowing you to code in multiple coding languages all from a platform that is completely customisable to the user. This flexibility is great but it does mean that you need to spend time telling VS Code what it is you want to do and how. This is where extensions come in; extensions are higher level packages that permit the use of a given coding language like Julia, edit your themes and icons, provide helpful applications like spell checker or Bracket Pair Colorizer, and for adding your own [VS Code pet](https://tonybaloney.github.io/vscode-pets/usage).
+VS Code is a free source-code editor, allowing you to code in multiple coding languages all from a platform that is completely customisable to the user - think of it as a more language agnostic version of RStudio. This flexibility is great but it does mean that you need to spend time telling VS Code what it is you want to do and how. This is where extensions come in; extensions are higher level packages that permit the use of a given coding language like Julia, edit your themes and icons, provide helpful applications like spell checker or Bracket Pair Colorizer, and for adding your own [VS Code pets](https://tonybaloney.github.io/vscode-pets/usage).
 
 To install Julia in VS Code do the following (you only need to do this once):
 
