@@ -146,7 +146,7 @@ you should see something like:
 
 ![Package Status Check](Figs/StatusCheck.png)
 
->   packages can removed in the same way i.e. `] remove Plots`  (or `Pkg.remove("Plots")`) will remove the Plots package from your project environment (and its record in the Project.toml and Manifest.toml files)
+>   packages can removed in the same way i.e. `] rm Plots`  (or `Pkg.rm("Plots")`) will remove the Plots package from your project environment (and its record in the Project.toml and Manifest.toml files)
 
 ## Gearing up to Do More Stuff (what packages do I need).
 
