@@ -25,7 +25,7 @@ For this tutorial you'll need the following two packages:
 
 While we already have `Plots.jl` in this project, we just need to `] add DifferentialEquations`.
 
-The `DifferentialEquations.jl` can be a tad clunky so the below code might take a while to compile. If you hit errors, we recommend removing (`] rm DifferentialEquations`) and reinstalling (`] add DifferentialEquations`) the package."
+The `DifferentialEquations.jl` can be a tad clunky so the below code might take a while to compile. If you hit errors, we recommend removing (`] rm DifferentialEquations`) and reinstalling (`] add DifferentialEquations`) the package.
 
 You probably want to start a new script for this exercise.  File -> New File -> julia
 
@@ -45,24 +45,24 @@ To recall from your ecology modules, this is a system of equations with logistic
 A few details to note.
 
 - there is only one source of density dependence in this model/system - logistic growth of the producer. Density dependence is required to generate coexistence and stability. 
-- the type I functional response means that the consumer foraging rate increases with prey density and does not saturate.  It means that the mortality rate that consumers impose on the prey is constant and independent of the prey density.  It is thus density independent and does not contribute to stability.  There are two other functional responses.  The Type II, which has saturating consumption rate and generates _inverse_ density dependence, and the Type III, which has accelerating consumption rate with prey density, and thus generates increasing mortality in the prey with increasing prey density, and thus density dependence.  It is only Type III functional responses that are linked to consumers/predators _stabilising_ their prey populations.  It is also a pretty rare functional response!
+- the Type I functional response means that the consumer foraging rate increases with prey density and does not saturate. It means that the mortality rate that consumers impose on the prey is constant and independent of the prey density. It is thus density independent and does not contribute to stability. There are two other functional responses. The Type II, which has saturating consumption rate and generates *inverse* density dependence, and the Type III, which has accelerating consumption rate with prey density, and thus generates increasing mortality in the prey with increasing prey density, and thus density dependence.  It is only Type III functional responses that are linked to consumers/predators *stabilising* their prey populations.  It is also a pretty rare functional response!
 - the consumer mortality rate is also constant and thus density independent.
 
 ### How does this relate to the Bioenergetic Food Web Model?
 
-The complex model of consumer - resource interactions that is represented by the `BEFW` model has at it's heart two equations: one for producers and one for consumers.  So at it's heart, it is not too different in structure to the model above!  However, the differences, spelled out in this [paper](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12713) and this [paper](https://indico.ictp.it/event/a08145/session/28/contribution/17/material/0/4.pdf), are 
+The complex model of consumer - resource interactions that is represented by the `BEFW` model has at it's heart two equations: one for producers and one for consumers.  So at it's heart, it is not too different in structure to the model above! However, the differences, spelled out in this [paper](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12713) and this [paper](https://indico.ictp.it/event/a08145/session/28/contribution/17/material/0/4.pdf), are 
 
-- the paramters are functions of body size
+- the parameters are functions of body size
 - because of this, we can expand the number of resource and consumer equations for multiple values of body size
 - this creates a potentially big system of equations, instead of just 2.
 
-However, and this is important, the process of solving these equations, whether it is two of them, or 100 of them, is essentially what we are introducing below.  If you were to look inside of the `BEFW` model, you would see the same functions and structure as we introduce here.
+However, and this is important, the process of solving these equations, whether it is two of them, or 100 of them, is essentially what we are introducing below. If you were to look inside of the `BEFW` model, you would see the same functions and structure as we introduce here.
 
 #### The Three Steps For Simulating Food Web Dynamics
 
 There are 3 major steps involved in constructing and solving this model in Julia (these happen to be the same three steps in all programming languages, including R where the `deSolve` package accomplishes much of this same functionality): 
 
-1. Define a function for your model (i.e., transform the above differential equations into a function that can be read by the solver). This function tells the solver how the variables of interest (here $R$ and $C$) change over time.
+1. Define a function for your model (i.e. transform the above differential equations into a function that can be read by the solver). This function tells the solver how the variables of interest (here $R$ and $C$) change over time.
 2. Define the problem. Here, the problem is defined by the function, the parameters ($r$, $\alpha$, $e$ and $m$), the initial conditions and the timespan of the simulation. In this step you provide the solver with all the details it needs to find the solution.
 3. Solve!
 
@@ -125,7 +125,6 @@ tspan = (0.0,100.0) # you have to use a Pair (tuple with 2 values) of floating p
 
 We then formally define the problem by passing the function (`LV_model`), the parameters (listed in our named tuple `p`), the initial values (`u0`) and the timespan (`tspan`) to `ODEProblem()`:
 
-
 ```{julia}
 prob = ODEProblem(LV_model, u0, tspan, p)
 ```
@@ -142,11 +141,11 @@ Here we have chosen to use the default algorithm because it's a simple problem, 
 sol = solve(prob)
 ```
 
-The solver produces 2 objects: `sol.t` and `sol.u` that respectivley store the time steps and the variables of interest through time. Let's have a look.
+The solver produces 2 objects: `sol.t` and `sol.u` that respectively store the time steps and the variables of interest through time. Let's have a look.
 
 #### Step 4. Visualise the outputs"
 
-Once the problem has been solved, the results can be explored and plotted. In fact, the `DifferentialEquations.jl` package has its own built in plotting recipe that provides a very fast and conventient way of visualing the abundance of the two species through time:
+Once the problem has been solved, the results can be explored and plotted. In fact, the `DifferentialEquations.jl` package has its own built in plotting recipe that provides a very fast and convenient way of visualising the abundance of the two species through time:
 
 
 ```{julia}
@@ -159,11 +158,11 @@ plot(sol,
 	lw = 2) 
 ```
 
-One thing to note here, when plotting in Julia you don't need to seperate label names (`label = [prey predator]`) or linestyles (`linestyle = [:dash :dot]`) with a comma as you would in R. This will also be case for most plotting options in Julia.
+One thing to note here, when plotting in Julia you don't need to separate label names (`label = [prey predator]`) or linestyles (`linestyle = [:dash :dot]`) with a comma as you would in R. This will also be case for most plotting options in Julia.
 
 #### Step 5. Play some games
 
-Now that you see how this works, perhaps you can do a bit of an experiment by varying things in the `p = ` (paramters) part of the code?
+Now that you see how this works, perhaps you can do a bit of an experiment by varying things in the `p = ` (parameters) part of the code?
 
 - Can you increase the number of time steps?
 - What happens when you increase `K`?
