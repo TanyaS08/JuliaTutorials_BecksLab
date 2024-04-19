@@ -75,7 +75,7 @@ This sequence of figures aligns with the instructions below.
 
 Now that you have an active project and a new script file you can open the Julia REPL. REPL stands for *read, execute, print and loop*. The REPL is like the console in R and is where the magic happens. In Eva's words, it's VS Code's way of using Julia for a brain.
 
-To do this you type F1 or cmd/cntrl - shift-p or View -\> Command Palette and choose Julia REPL. The command palette will appear as a drop down menu with a search function at the top of the page.
+To do this you type F1 or cmd/ctrl - shift-p or View -\> Command Palette and choose Julia REPL. The command palette will appear as a drop down menu with a search function at the top of the page.
 
 Now that you have an interface with Julia as a brain, you can actually do something! Try this: type `print("Hello world")` in the REPL and press Enter/Return. If you've done all of the above correctly, Hello world should print in the REPL.
 
@@ -86,14 +86,6 @@ Next, type `print("Hello world")` in the script. Just like RStudio, you can send
 ## Activating your project, the Project.toml and Manifest.toml
 
 We mentioned above that it is good practice to work within an environment specific to each project. The Julia package manager (`Pkg`) allows you to do that easily: Unlike traditional package managers, which install and manage a single global set of packages, `Pkg` is designed around environments: independent sets of packages that can be local to an individual project or shared and selected by name (text taken directly from the documentation).
-
-The project environment is stored via two files:
-
-`Project.toml` - stores a list of packages that have been installed and their versions (very useful when sharing code as any user can see exactly what version of a package has been used)
-
-`Manifest.toml` - does the same thing but for all the package dependencies (other packages that are essential, or form functional parts, of the package you want to use)
-
-These files are created and modified automatically as you invoke the use of various packages.
 
 ### Getting started: activating your project.
 
