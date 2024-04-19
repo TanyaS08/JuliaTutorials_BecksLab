@@ -20,6 +20,7 @@ This document covers the following:
 
 - Basic maths
 - Arrays and Matrices
+- Dictionaries
 - DataFrames and CSVs
 - Functions
 - Loops
@@ -322,4 +323,38 @@ This is because we are trying to add a Float to an object that is of the type In
 ```{julia}
 mat = convert(Matrix{Float64}, mat)
 mat[1,2] = 1.5
+```
+
+## Dictionaries
+
+Dictionaries are another way to collect information in **Julia**, these look-up tables allow you to organise information (the **key**) with corresponding data (**value**). When we create a dictionary we specify it as 'value' `=>` 'key'. Dictionaries are useful if you need to store a collection of parameters or outputs, especially because the values for each pair can be of a different type.
+
+```{julia}
+parameters = Dict{Symbol,Any}(
+        :growth_rate => 0.4,
+        :response => :logistic,
+        :carry_capacity => 0.28,
+    )
+```
+
+We can also add an 'entry' to our dictionary very easily (or change the value)
+
+```{julia}
+parameters[:abundance] = collect(1:10)
+```
+
+### Looking things up
+
+To get a value, if you have the key:
+
+```{julia}
+parameters[:growth_rate]
+```
+
+You can also get all values using `values()` (and the same for keys using `keys()`). Note that these functions are iterators and they have one job: to iterate through a dictionary value by value (or key by key) so if we want to turn these into an array we need to also call `collect()`
+
+```{julia}
+param_vals = collect(values(parameters))
+
+param_keys = collect(keys(parameters))
 ```
