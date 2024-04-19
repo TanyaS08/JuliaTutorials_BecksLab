@@ -63,7 +63,7 @@ aa,cc
 
 9. You can view a `.csv` or `.txt` file by clicking on a file name in the project directory (left panel) - this opens a viewing window. CSV's also have a built in 'Preview' mode - try using right click>Open Preview on a `.csv` file and check it out.
 
-10. Docstrings are a supplement to `#`-based comments for documenting your workflow. Basically, any string that appears just before an object will be interpreted as documenting it. When you use a docstring it is possible to call that description using help (`?` in the REPL) or hovering over the object. This can be very useful when you start declaring variables or building your own functions.
+10. Docstrings are a supplement to `#`-based comments for documenting your workflow. Basically, any string that appears just before an object will be interpreted as documenting it. When you use a docstring it is possible to call that description using help (`?` in the REPL) or hovering over the object in VSCode. This can be very useful when you start declaring variables or building your own functions.
 
 ```{julia}
 "a wonderfully documented and described variable"
