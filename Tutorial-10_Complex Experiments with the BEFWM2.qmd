@@ -45,7 +45,7 @@ Random.seed!(123)
 Now, lets set up the collecting data frame.
 
 ```{julia}
-df_collect = DataFrame(Z = [], K = [], FinalRichness = [], FinalBiomass = [], FinalStability = [])
+df_collect = DataFrame(Z = [], K = [], FinalRichness = [], FinalBiomass = [], ShannonDiversity = [])
 ```
 
 Now, set up the loop to use these variables and generate outputs. Notice that we use `for z in Z_levels` - this is a clever trick of the looping method, where `z` simply iterates over the values of `Z_levels` without having to specify the index value (e.g. no use of `Z_levels[i]` etc).
@@ -54,7 +54,7 @@ The significant BIG thing here is the LogisticGrowth function which allows us to
 
 Note too our use of `println` and the values of `Z` and `K` to produce an informative _break_ between each combination.
 
-> Can you guess what increasing K will do to the biomass and richness of the community at equlibrium?  How about Z?  Will higher Z make things more or less stable?
+> Can you guess what increasing K will do to the biomass and richness of the community at equilibrium?  How about Z?  Will higher Z make things more or less stable?
 
 ```{julia}
 for z in Z_levels
@@ -63,22 +63,24 @@ for z in Z_levels
         println(" ***> This is iteration with Z = $z and K = $k\n")
 
         # Define the food web
-        fw = FoodWeb(nichemodel, S; C, Z = z)
+        fw = Foodweb(:niche; S = S, C = C)
         # specify the K value of the producer growth function
-        # this updates the fw
-        LogisticGrowth(fw; K = k)
 
         B0 = rand(S)
-        params = ModelParameters(fw)
+        # specify model to simulate logistic growth as well as BM ratio
+        params = default_model(fw, BodyMass(; Z = z), LogisticGrowth(; K = k))
+        
+        # number of timestamps
+        t = 300
 
-        out = simulate(params, B0)
+        out = simulate(params, B0, t)
 
-        # collect info
+        # calculate metrics
         fin_rich = richness(out)
-        fin_bio = biomass(out).total
-        stab = community_cv(out)
+        fin_biomass = total_biomass(out)
+        s_div = shannon_diversity(out)
 
-        push!(df_collect, [z, k, fin_rich, fin_bio, stab])
+        push!(df_collect, [z, k, fin_rich, fin_biomass, s_div])
     end
 end
 ```
@@ -95,6 +97,8 @@ One option here is to plot one of our `Final` Objects as the response variable a
 
 Let's first look at a single plot of stability
 ```{julia}
+#| eval: false
+
 @df df_collect plot(:K, [:FinalStability], group = :Z, 
     ylabel = "Stabilty", 
 	xlabel = "Karrying Kapacity",
@@ -105,6 +109,8 @@ Let's first look at a single plot of stability
 Now some new ploting tricks... 3 plots in a layout.
 
 ```{julia}
+#| eval: false
+
 p1 = @df df_collect plot(:K, [:FinalStability], group = :Z, 
     legend = :bottomright,
     ylabel = "Stabilty", 
@@ -146,7 +152,6 @@ Finally, a predator feeding via a Type III can deliver a _density dependent_ mor
 > Remember No. 2: The Type II is the MOST common.  Type I is rare and even non-existent because it suggests there are no limits to how much a consumer can eat.  Type III is also rare, but it is at least plausible and interesting.
 
 ```{julia}
-#| echo: false
 
 f_t1(n) = 0.5*n
 f_t2(n) = 0.5*n/(0.2+0.01*n)
@@ -167,21 +172,7 @@ The Classic functional less phenomenological in that the response is defined mor
 
 #### Creating Type II vs. Type III with the Bioenergetic response
 
-Let's look at using the Bioenergetic functional response, and see here how we can vary the shape between Type II and Type III. The argument to make this happen is the `h` argument, which stands for the _hill exponent_. We will look at how Richness, Biomass and Stability are affected by the hill exponent.
-
-One of the key things to note in the code is this block:
-
-```{julia}
-#| eval: false
-
-    # make the network
-    # Note the new BioenergeticResponse function
-    fw_h = FoodWeb(nichemodel, S; C)
-    BioenergeticResponse(fw_h, h = h)
-```
- Here we see also that we can define the functional response function (`BioenergeticResponse`) which allows us to define specific parameters in that function (i.e. `h`).  Like the Producer Growth function, this updates the foodweb.
-
-Let's see it all put together
+Let's look at using the Bioenergetic functional response, and see here how we can vary the shape between Type II and Type III. We can do this by modifying the *hill_exponent* after we have specified the model (*i.e.,* after the `default_model` call). We will look at how Richness, Biomass and Shannon Diversity are affected by the hill exponent.
 
 ```{julia}
 
@@ -196,7 +187,7 @@ h_levels = [1.0, 1.1, 1.25, 2.0]
 
 # set collecting data frame 
 # we will look at how Richness, Biomass and Stability are affected by the hill exponent
-df_collect_h = DataFrame(h = [], FinalRichness = [], FinalBiomass = [], FinalStability = [])
+df_collect_h = DataFrame(h = [], FinalRichness = [], FinalBiomass = [], ShannonDiversity = [])
 
 # create look across values of h
 for h in h_levels 
@@ -205,24 +196,27 @@ for h in h_levels
     # make the network
     # Note that we specify the Environment, but there is no K or T set (using defaults)
     # Note the new BioenergeticResponse function
-    fw_h = FoodWeb(nichemodel, S; C)
-
-    # update h from default of 2 to value in h_level
-    BioenergeticResponse(fw_h, h = h)
+    fw_h = Foodweb(:niche; S = S, C = C)
     
     # set body sizes and parameters 
     B0 = rand(S)
-    params = ModelParameters(fw_h)
+    params = default_model(fw_h)
 
-    # simulate dynamics
-    out_h = simulate(params, B0)
+    # here we now update the exponent of the hill function
+    params.hill_exponent = h
+
+    # specify number of time steps
+    t = 300
+
+    # simulate
+    sim_niche = simulate(params, B0, t)
 
     # collect data 
-    fin_rich = richness(out_h)
-    fin_bio = biomass(out_h).total
-    stab = community_cv(out_h)
+    fin_rich = richness(sim_niche)
+    fin_bio = total_biomass(sim_niche)
+    s_div = shannon_diversity(sim_niche)
 
-    push!(df_collect_h, [h, fin_rich, fin_bio, stab])
+    push!(df_collect_h, [h, fin_rich, fin_bio, s_div])
 end
 
 df_collect_h
@@ -231,6 +225,9 @@ df_collect_h
 Now, we can visualise these data
 
 ```{julia}
+#| eval: false
+
+
 # Visualize the results
 p1_h = @df df_collect_h plot(:h, [:FinalStability],
     legend = :bottomright,
@@ -257,19 +254,20 @@ plot(p1_h, p2_h, p3_h, layout=(3,1), legend = false, size = (1000, 1000))
 
 What can you see happening as we move away from the destabilising Type II functional response?
 
-Can you modify this code to explore what happens at differnt values of K? You'll need to modify this section, and the collection data frame.
+Can you modify this code to explore what happens at different values of K? You'll need to modify this section, and the collection data frame.
 
 ```{julia}
 #| eval: false
 
    # make the network
-    fw_h = FoodWeb(nichemodel, S; C)
-    LogisticGrowth(fw_h, K = k)
-    BioenergeticResponse(fw_h, h = h)
+    fw_h = Foodweb(:niche; S = S, C = C)
 
     # set body sizes and parameters 
     B0 = rand(S)
-    params = ModelParameters(fw_h)
+    params = default_model(fw_h, LogisticGrowth(; K = k))
+
+    # update the exponent of the hill function
+    params.hill_exponent = h
 ```
 
 ### Experiment 3: What is Z
@@ -296,7 +294,7 @@ z_levels= [0.1, 1, 10, 100]
 
 # set collecting data frame 
 # we will look at how Richness, Biomass and Stability are affected by the hill exponent
-df_collect_z = DataFrame(z = [], FinalRichness = [], FinalBiomass = [], FinalStability = [])
+df_collect_z = DataFrame(z = [], FinalRichness = [], FinalBiomass = [], ShannonDiversity = [])
 
 # create look across values of h
 for z in z_levels 
@@ -305,21 +303,24 @@ for z in z_levels
     # make the network
     # Note that we specify the Environment, but there is no K or T set (using defaults)
     # Note Z is specified when building the FoodWeb() network
-    fw_z = FoodWeb(nichemodel, S; C, Z = z)
+    fw_z = Foodweb(:niche; S = S, C = C)
     
     # set body sizes and parameters 
     B0 = rand(S)
-    params = ModelParameters(fw_z)
+    params = default_model(fw_z, BodyMass(; Z = z))
 
-    # simulate dynamics
-    out_z = simulate(params, B0)
+    # specify number of time steps
+    t = 300
+
+    # simulate
+    out_z = simulate(params, B0, t)
 
     # collect data 
     fin_rich = richness(out_z)
-    fin_bio = biomass(out_z).total
-    stab = community_cv(out_z)
+    fin_bio = total_biomass(out_z)
+    s_div = shannon_diversity(out_z)
 
-    push!(df_collect_z, [z, fin_rich, fin_bio, stab])
+    push!(df_collect_z, [z, fin_rich, fin_bio, s_div])
 end
 
 df_collect_z
@@ -328,6 +329,8 @@ df_collect_z
 As with the variation in `h`, we can create a set of figures too!  Perhaps it's worth your time to consult [Brose et al 2006](https://onlinelibrary.wiley.com/doi/10.1111/j.1461-0248.2006.00978.x) and [Reger et al 2017](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12713) to make sure you understand how Z works and particularly how stability is expected to vary with Z!  One of the most important things to understanding is why the stability metric is negative and what values of stability close, or far away, from zero mean.
 
 ```{julia}
+#| eval: false
+
 # Visualize the results
 p1_z = @df df_collect_z plot(:z, [:FinalStability],
     legend = :bottomright,
@@ -381,14 +384,14 @@ interspecific_vals = 0.8:0.05:1.2 # a set of (9) values between 0.8 and 1.2 in s
 
 # set collecting data frame 
 # we will look at how Richness, Biomass and Stability are affected by the hill exponent
-df_collect_comp = DataFrame(InterComp = [], FinalRichness = [], FinalBiomass = [], FinalStability = [])
+df_collect_comp = DataFrame(InterComp = [], FinalRichness = [], FinalBiomass = [], ShannonDiversity = [])
 
 for alpha_ij in interspecific_vals
     println("***> This is iteration with alpha_ij = $alpha_ij\n")
     
     # this will make always the same network and body mass
     Random.seed!(123)
-    foodweb = FoodWeb(nichemodel, S, C = C, tol_C = 0.01, Z = Z)
+    foodweb = Foodweb(:niche; S = S, C = C, Z = Z)
 
     # enhance detail in the network
     # specify K
@@ -399,7 +402,7 @@ for alpha_ij in interspecific_vals
     BioenergeticResponse(foodweb, h = 1)
 
     # define parameters with extras
-    params_comp = ModelParameters(foodweb)
+    params_comp = default_model(foodweb, BodyMass(; Z = z))
 
     # set bodymass
     B0 = rand(S)
