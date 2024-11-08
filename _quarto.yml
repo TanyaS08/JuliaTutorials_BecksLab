@@ -35,3 +35,7 @@ format:
   html:
     theme: cosmo
     toc: true
+
+
+execute:
+  freeze: auto
