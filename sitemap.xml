@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-3_Building and Working with DataFrames.html</loc>
-    <lastmod>2024-11-08T12:57:29.253Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-8_Intro To Eco Net Dyn.html</loc>
-    <lastmod>2024-11-08T15:17:40.978Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-10_Complex Experiments with the BEFWM2.html</loc>
-    <lastmod>2024-11-08T12:58:03.137Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-7_Intro To Differential Equations.html</loc>
-    <lastmod>2024-11-08T12:57:50.087Z</lastmod>
-  </url>
-  <url>
     <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-1_Downloads Setups and Your First Project.html</loc>
-    <lastmod>2024-11-08T12:57:23.646Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-6_Extra Tips and Tricks.html</loc>
-    <lastmod>2024-11-08T12:57:43.226Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-5_Plotting in Julia.html</loc>
-    <lastmod>2024-11-08T12:57:38.586Z</lastmod>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
   </url>
   <url>
     <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/index.html</loc>
-    <lastmod>2024-11-08T12:56:47.662Z</lastmod>
+    <lastmod>2024-11-08T15:21:13.378Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-6_Extra Tips and Tricks.html</loc>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-5_Plotting in Julia.html</loc>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-3_Building and Working with DataFrames.html</loc>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
   </url>
   <url>
     <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-9_Experiments with the BEFWM2.html</loc>
-    <lastmod>2024-11-08T12:58:00.188Z</lastmod>
-  </url>
-  <url>
-    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-4_Programming Basics.html</loc>
-    <lastmod>2024-11-08T12:57:34.755Z</lastmod>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
   </url>
   <url>
     <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-2_Using Julia for Maths and Vector Stuff.html</loc>
-    <lastmod>2024-11-08T14:18:02.821Z</lastmod>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-10_Complex Experiments with the BEFWM2.html</loc>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-4_Programming Basics.html</loc>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-8_Intro To Eco Net Dyn.html</loc>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
+  </url>
+  <url>
+    <loc>https://TanyaS08.github.io/JuliaTutorials_BecksLab/Tutorial-7_Intro To Differential Equations.html</loc>
+    <lastmod>2024-11-08T15:21:13.110Z</lastmod>
   </url>
 </urlset>
