@@ -314,6 +314,8 @@ typeof(mat)
 So what happens if we want to replace one of the elements with a Float?
 
 ```{julia}
+#| eval: false
+
 mat[1,2] = 1.5
 ```
 
