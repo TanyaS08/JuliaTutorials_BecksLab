@@ -6,7 +6,7 @@ format:
     html:
         embed-resources: true
 title-block-banner: true
-#jupyter: julia-1.8
+jupyter: julia-1.8
 ---
 
 Some quick tips that we've learnt the hard way...
@@ -16,8 +16,8 @@ Some quick tips that we've learnt the hard way...
 3. Toggle word wrap via `View>Toggle Word Wrap` or `alt-Z`
 4. Red wavy line under code in your script = _error in code_
 5. Blue wavy line under code in your script = _possible error in code_
-6. Errors and possible erros can be viewed in the PROBLEMS section of the REPL
-7. You can view your current variables (similar to the top right hand panel in RStudio) by clickling on the Julia explorer: Julia workspace symbol in the activity bar (three circles). You can then look at them in more detail by clicking the sideways arrow (when allowed).
+6. Errors and possible errors can be viewed in the PROBLEMS section of the REPL
+7. You can view your current variables (similar to the top right hand panel in RStudio) by clicking on the Julia explorer: Julia workspace symbol in the activity bar (three circles). You can then look at them in more detail by clicking the sideways arrow (when allowed).
 
 ### COPYING versus DEEP COPYING :-)
 
@@ -62,3 +62,33 @@ aa,cc
 ```
 
 9. You can view a `.csv` or `.txt` file by clicking on a file name in the project directory (left panel) - this opens a viewing window. CSV's also have a built in 'Preview' mode - try using right click>Open Preview on a `.csv` file and check it out.
+
+10. Docstrings are a supplement to `#`-based comments for documenting your workflow. Basically, any string that appears just before an object will be interpreted as documenting it. When you use a docstring it is possible to call that description using help (`?` in the REPL) or hovering over the object in VSCode. This can be very useful when you start declaring variables or building your own functions.
+
+```{julia}
+"a wonderfully documented and described variable"
+var = 101
+```
+
+you can (should) also do this with functions
+
+```{julia}
+"""
+    _rategradient(∂X, ∂Y)
+
+Returns the rate of change in units of the values stored in the grid, and the
+angle of the change in wind direction, *i.e.* an angle of 180 means that the
+value is increasing *from* the south. When both ∂X and ∂Y are equal to 0, the
+angle is assumed to be 0.
+"""
+function _rategradient(∂X::T, ∂Y::T) where {T <: Number}
+    if ∂X == ∂Y == 0.0
+        return (0.0, 0.0)
+    end
+    m = sqrt(∂X^2 + ∂Y^2)
+    Δ = ∂X >= 0.0 ? 0.0 : 180.0
+    θ = rad2deg(atan(∂X, ∂Y)) + Δ
+    θ = ∂X > 0.0 ? θ + 180.0 : θ
+    return (m, θ)
+end
+```

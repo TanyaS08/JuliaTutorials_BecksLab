@@ -6,7 +6,7 @@ format:
     html:
         embed-resources: true
 title-block-banner: true
-#jupyter: julia-1.8
+jupyter: julia-1.8
 ---
 In the previous chapter, we learned how to make networks and run a simulation.  We did this for a simple tri-trophic chain where we specified the network with a matrix of ones and zeros, and for a more complex network defined by the niche model where we specified species richness and connectance.  We also learned how to visualise the simulations and to collect several metrics about the simulations, including detail on biomass, diversity and stability.
 

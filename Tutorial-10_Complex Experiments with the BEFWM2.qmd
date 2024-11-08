@@ -6,7 +6,7 @@ format:
     html:
         embed-resources: true
 title-block-banner: true
-#jupyter: julia-1.8
+jupyter: julia-1.8
 ---
 
 The previous tutorial focused on experiments where we manipulated the number of networks and various network parameters.  This is one set of things we can change/vary in an _in silico_ experiment.  The other set of things we can change are features of the model, such as the shape of the functional response (see Tutorial 7), features of the environment such as the carrying capacity, or even empirical relationships that drive trophic structure and interaction strengths, such as the predator-prey mass ratio.
