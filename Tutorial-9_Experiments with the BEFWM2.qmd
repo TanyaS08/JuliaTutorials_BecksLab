@@ -45,7 +45,7 @@ nets = []
 # we use push!() to add the food webs to nets
 # always start with a for and end with an end.
 for i in 1:3
-    push!(nets, FoodWeb(nichemodel, S[i]; C=C, tol_C = 0.01))
+    push!(nets, Foodweb(:niche; S = S[i], C = C))
 end
 ```
 
@@ -100,7 +100,7 @@ begin
     # while loop
 	while l < reps # reps is 3 here...
 	    # generate a network
-	    A = FoodWeb(nichemodel, 20; C=0.15, tol_C = 0.01)
+	    A = Foodweb(:niche; S = 20, C = 0.15)
 	    # add the network to the set
         push!(networks, A)
         # update the monitor
@@ -138,7 +138,7 @@ Fantastic.  Now you are ready for the next steps.  We want to run the `Ecologica
 First, we create the holding pen for our information.  We'll construct a data frame to collect five pieces of information: the network id (1,2 or 3), species richness at the start (our initial S), species richness at the end, total biomass at the end and stability at the end.
 
 ```{julia}
-outputs = DataFrame(Network = [], Init_Rich = [], Fin_Rich = [], Tot_biomass = [], Stability = [])
+outputs = DataFrame(Network = [], Init_Rich = [], Fin_Rich = [], Tot_biomass = [], Shannon_dic = [])
 ```
 
 #### Step 2: use the pre-defined networks
@@ -155,24 +155,27 @@ for i in 1:3
     println("\nThis is network: ", i, "with species richness = ", S,"\n")
 
     # step A: define model paramters
-    params = ModelParameters(nets[i])
+    params = default_model(nets[i])
 
     # step B: define body mass
     B0 =  rand(S)
 
-    # step C: simulate
-    out = simulate(params, B0)
+    # step C: set number of timestamps
+    t = 300
+
+    # step D: simulate
+    out = simulate(params, B0, t)
 
     # steps D: calculate metrics
     fin_rich = richness(out)
-    fin_biomass = biomass(out).total
-    stability = community_cv(out)
+    fin_biomass = total_biomass(out)
+    s_div = shannon_diversity(out)
 
     # step E: add things to the data frame
     # note the first arg is the data frame and then
     # the values we want allocated to the five slots
     # are in []
-    push!(outputs, [i, S, fin_rich, fin_biomass, stability])
+    push!(outputs, [i, S, fin_rich, fin_biomass, s_div])
 end
 ```
 
@@ -192,31 +195,35 @@ C = 0.2; # define the connectance (complexity) of the network
 
 # construct the food web
 Random.seed!(12325) # ensures your network and this one are the same
-foodweb_niche = FoodWeb(nichemodel, S, C=C)
+foodweb_niche = Foodweb(:niche; S = S, C = C)
 
 # construct the equations and fixed parameters
-params_niche = ModelParameters(foodweb_niche)
+params_niche = default_model(foodweb_niche)
 
 # define bodymasses between 0 and 1 and get S = 20 of them.
 Random.seed!(123)
 B0 = rand(S)
 
 # simulate using params and bodymasses
-# note additional argument tmax for max time steps
-# default is 300
-sim_niche = simulate(params_niche, B0)
+# specify number of time steps
+t = 300
+sim_niche = simulate(params_niche, B0, t)
 ```
 
-We've constucted a helper function to get information on which species go extinct and when they do.
+We've constructed a helper function to get information on which species go extinct and when they do.
 
 ```{julia}
-# collect and organise extinctons
+#| eval: false
+
+# collect and organise extinctions
 extinctions = get_extinct_species(sim_niche)
 ```
 
 This is a `Dict` object.  The numbers on the left of the `=>` are known as the `keys` and the numbers on the right are `values`.  We can create a mini- data frame out of this with the following code.  `key` and `values` are actually _extractor_ functions and `collect` is translating the extracted information into a vector.
 
 ```{julia}
+#| eval: false
+
 # create a data frame of extinctions
 ee1 = DataFrame(who = collect(keys(extinctions)), when = collect(values(extinctions)))
 ```
@@ -224,6 +231,8 @@ ee1 = DataFrame(who = collect(keys(extinctions)), when = collect(values(extincti
 Now we can try and add this information to the plot.  For the time being, we'll focus on adding the times that each of these species goes extinct to our figure.  To do this we need to access the extinction time column (`when`), add a bit of noise/jitter so that times that are really close together can be seen on our x-axis, and then plot these as points with coordinates `x = when` and `y = 0`.
 
 ```{julia}
+#| eval: false
+
 # add some jitter for close together events
 exts = ee1[:,2] .+rand.()
 

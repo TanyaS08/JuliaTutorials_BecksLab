@@ -17,6 +17,7 @@ Pkg.add("Random")
 Pkg.add("CSV")
 Pkg.add("DataFrames")
 Pkg.add("EcologicalNetworks")
+Pkg.add("EcologicalNetworksDynamics")
 Pkg.add("EcologicalNetworksPlots")
 Pkg.add("StatsPlots")
 
@@ -41,7 +42,6 @@ notebook() # this is what triggers the minimal install?
 using Conda
 Conda.add("jupyter-cache")
 
-
 # to make IJulia work with Revise
 # Revise.jl is a library that helps you keep your
 # Julia sessions running longer, reducing the need to
@@ -60,16 +60,3 @@ Conda.add("jupyter-cache")
 #   catch e
 #     @warn "Revise init" exception=(e, catch_backtrace())
 #   end
-
-# install local BEFWM2
-# The local machine copy of the GitHub Repo is being used
-# (e.g. use GitHub Desktop to clone BEFWM2 to local machine)
-# (If copy exists, Fetch Origin before doing this)
-
-# Pkg.add(path = "/Users/apb/Documents/GitHubREPOS/BEFWM2/")
-Pkg.develop(path = "/Users/apb/Documents/EcologicalNetworksDynamics.jl-main/")
-
-# run this before updating to new dev
-# EcologicalNetworksDynamics.jl-ni_usecase
-# Pkg.rm("EcologicalNetworksDynamics")
-# ] dev ~/Documents/EcologicalNetworksDynamics.jl-ni_usecase

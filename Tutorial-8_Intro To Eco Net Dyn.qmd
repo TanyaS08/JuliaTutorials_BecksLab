@@ -63,7 +63,7 @@ Once this folder is unzipped in your Documents Folder, you can _install_ it usin
 ```{julia}
 #| eval: false
 using Pkg
-Pkg.develop(path = "~/Documents/EcologicalNetworksDynamics.jl-main/")
+Pkg.add("EcologicalNetworksDynamics")
 ```
 
 ## Setting Up to Use the Ecological Networks Dynamics modelling
@@ -119,7 +119,7 @@ Here we make a foodweb, actually, a food chain, from an _adjacency matrix_ with 
 
 ```{julia}
 A = [0 0 0; 1 0 0; 0 1 0] # 1 basal producer ⋅ Species 2 eats 1 ⋅ Species 3 eats 2
-foodweb = FoodWeb(A)
+foodweb = Foodweb(A)
 ```
 
 #### Step 2: Generate the model parameters
@@ -129,7 +129,7 @@ Once the foodweb is created, the next step is to attribute values to the model p
 ```{julia}
 # construct the equations and fixed parameters
 # see below for body size dependent parameters etc
-params = ModelParameters(foodweb)
+params = default_model(foodweb)
 ```
 
 #### Step 3: Simulate biomass dynamics
@@ -139,10 +139,12 @@ Everything is ready to run the simulation, which can be simply done by calling s
 ```{julia}
 # create body sizes for each species
 B0 = [0.5, 0.5, 0.5]
+# specify number of time steps
+t = 300
 
 # use simulate function
 # builds equations and uses DiffEq to run them!
-sim = simulate(params, B0)
+sim = simulate(params, B0, t)
 ```
 
 #### Step 4: Seeing the outputs!
@@ -184,7 +186,7 @@ C = 0.2 # define the connectance (complexity) of the network
 
 # construct the food web
 Random.seed!(12325) # ensures your network and this one are the same
-foodweb_niche = FoodWeb(nichemodel, S; C=C)
+foodweb_niche = Foodweb(:niche; S = S, C = C)
 
 # see it:
 foodweb_niche.A
@@ -197,17 +199,18 @@ As above, our next step is to define a vector of bodymasses and then pass this, 
 ```{julia}
 # construct the equations and fixed parameters
 # see below for body size dependent parameters etc
-params_niche = ModelParameters(foodweb_niche)
+params_niche = default_model(foodweb_niche)
 
 # define bodymasses between 0 and 1 and get S = 20 of them.
 # this will ensure your plot looks like the one in the document
 Random.seed!(123)
 B0 = rand(S)
+t = 300
 
 # simulate using params and bodymasses
 # note additional argument tmax for max time steps
 # default is 300
-sim_niche = simulate(params_niche, B0)
+sim_niche = simulate(params_niche, B0, t)
 ```
 
 #### Step 3. Visualising the dynamics
@@ -256,36 +259,34 @@ size(sim_niche.t)
 We can also find out who went extinct, and when.  You saw some of that detail, I hope, in the output of `simulate`.
 
 ```{julia}
+#| eval: false
 get_extinct_species(sim_niche)
 ```
 
 #### Biomass, Diversity and Stability
 
-First, we can get a meaure of total biomass in the community, at equilibrium, and that of each species.  Note how you can get the components too.
+First, we can get a measure of total biomass in the community, at equilibrium, and that of each species.  Note how you can get the components too.
 
 ```{julia}
-biomass(sim_niche)
+sim_niche.u
 ```
 
 ```{julia}
 # components
-biomass(sim_niche).total
+total_biomass(sim_niche)
 ```
 
-```{julia}
-biomass(sim_niche).species
-```
 
 Second, we can an estimate of species persistence - how many have gone extinct!  Remember that we started with 20, so a value of 0.45 means that there are 12 species left.
 
 ```{julia}
 # the percentage that persist
-species_persistence(sim_niche)
+persistence(sim_niche)
 ```
 
 ```{julia}
 # quick calculation of number left (but see richness below!)
-20*species_persistence(sim_niche) # the numbner left
+20*persistence(sim_niche) # the numbner left
 ```
 
 
@@ -298,11 +299,7 @@ richness(sim_niche)
 ```{julia}
 shannon_diversity(sim_niche)
 ```
-And we can estimate evenness:
 
-```{julia}
-evenness(sim_niche)
-```
 
 Finally, we can look at stability - all built in metrics of stability are based on the coefficient of variation of species biomass. The CV is a measure of standardised variation - the standard deviation / mean (https://en.wikipedia.org/wiki/Coefficient_of_variation).  It is not 'stability' in the strict mathematical sense, but an estimation of how variable the dynamics are.
 
@@ -311,18 +308,21 @@ Finally, we can look at stability - all built in metrics of stability are based 
 The master function is `coefficient_of_variation` and delivers four results - Coefficient of Variation (CV) of community biomass and its partition into average species CV (`community_cv` above), species mean CV and synchrony, along with the variation of each species; following Thibault & Connolly (2013):
 
 ```{julia}
+#| eval: false
 coefficient_of_variation(sim_niche)
 ```
 
 Note the warning.... do you understand what it's talking about?  Think about the extinctions detail above.  You can follow the instructions, right?
 
 ```{julia}
+#| eval: false
 coefficient_of_variation(sim_niche, last = 4)
 ```
 
 You can get parts of this with specific helper functions, such as:
 
 ```{julia}
+#| eval: false
 community_cv(sim_niche, last = 4)
 ```
 
