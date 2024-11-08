@@ -20,27 +20,27 @@ Some quick tips that we've learnt the hard way...
 
 ### COPYING versus DEEP COPYING :-)
 
-8. Julia has a strange copying aspect where if a=b, any change in b will automatically cause the same change in a. For example, let's make an array of three numbers:
+8. Julia has a strange copying behaviour where if `a` = `b`, any change in `b` will automatically cause the same change in `a`. For example, let's make an array of three numbers:
 
 ```{julia}
 aa = [1,2,3]
 ```
 
-Here we make a copy of aa and call it bb.
+Here we make a copy of `aa` and call it `bb`.
 
 ```{julia}
 bb = aa
 print(bb)
 ```
 
-Now, we replace the second element of bb with the value 41.
+Now, we replace the second element of `bb` with the value 41.
 
 ```{julia}
 bb[2] = 41
 bb
 ```
 
-The default behaviour of `=` in Julia is to *UPDATE* any copy of the array, also:
+The default behaviour of `=` in Julia is to *UPDATE* any copy of the array, so we see the same change in `aa`:
 
 ```{julia}
 aa

@@ -6,6 +6,7 @@ format:
     html:
         embed-resources: true
 title-block-banner: true
+bibliography: references.bib
 ---
 
 ```{julia}
@@ -13,20 +14,20 @@ title-block-banner: true
 using DifferentialEquations, Plots, Random
 ```
 
-This document illustrates how to construct and solve differential equations in Julia using the `DifferentialEquations.jl` package. 
+This document illustrates how to construct and solve differential equations in Julia using the `DifferentialEquations.jl` package.
 
 In particular, we are interested in modelling a two species Lotka-Volterra like (predator-prey/consumer-resource) system. Such systems are fundamental in ecology and form the building blocks of complex networks and the models that represent them.
 
-For this tutorial you'll need the following two packages: 
+For this tutorial you'll need the following two packages:
 
-- `DifferentialEquations.jl` to solve the differential equations (same 'engine' as the one used by the `BioEnergeticFoodWebs.jl` model)
-- `Plots.jl` to visualise the results
+-   `DifferentialEquations.jl` to solve the differential equations (same 'engine' as the one used by the `BioEnergeticFoodWebs.jl` model)
+-   `Plots.jl` to visualise the results
 
 While we already have `Plots.jl` in this project, we just need to `] add DifferentialEquations`.
 
 The `DifferentialEquations.jl` can be a tad clunky so the below code might take a while to compile. If you hit errors, we recommend removing (`] rm DifferentialEquations`) and reinstalling (`] add DifferentialEquations`) the package.
 
-You probably want to start a new script for this exercise.  File -> New File -> julia
+You probably want to start a new script for this exercise. File -\> New File -\> julia
 
 ### An introduction to Differential Equations.
 
@@ -34,8 +35,8 @@ Differential equations are frequently used to model the change in variables of i
 
 This type of model can be formalised as a simple Lotka-Volterra predator prey model, consisting of a set of differential equations:
 
-- Resource dynamics: $\frac{dR}{dt} = r R (1-\frac{R}{K}) - \alpha R C$
-- Consumer dynamics: $\frac{dC}{dt} = e \alpha R C - m C$
+-   Resource dynamics: $\frac{dR}{dt} = r R (1-\frac{R}{K}) - \alpha R C$
+-   Consumer dynamics: $\frac{dC}{dt} = e \alpha R C - m C$
 
 where $R$ and $C$ are the abundances of the resource and consumer respectively, $r$ is the resource's growth rate, $K$ is the producer's carrying capacity, $\alpha$ is the consumer's ingestion rate, $e$ is the assimilation efficiency and $m$ is the consumer's mortality rate.
 
@@ -43,36 +44,36 @@ To recall from your ecology modules, this is a system of equations with logistic
 
 A few details to note.
 
-- there is only one source of density dependence in this model/system - logistic growth of the producer. Density dependence is required to generate coexistence and stability. 
-- the Type I functional response means that the consumer foraging rate increases with prey density and does not saturate. It means that the mortality rate that consumers impose on the prey is constant and independent of the prey density. It is thus density independent and does not contribute to stability. There are two other functional responses. The Type II, which has saturating consumption rate and generates *inverse* density dependence, and the Type III, which has accelerating consumption rate with prey density, and thus generates increasing mortality in the prey with increasing prey density, and thus density dependence.  It is only Type III functional responses that are linked to consumers/predators *stabilising* their prey populations.  It is also a pretty rare functional response!
-- the consumer mortality rate is also constant and thus density independent.
+-   there is only one source of density dependence in this model/system - logistic growth of the producer. Density dependence is required to generate coexistence and stability.
+-   the Type I functional response means that the consumer foraging rate increases with prey density and does not saturate. It means that the mortality rate that consumers impose on the prey is constant and independent of the prey density. It is thus density independent and does not contribute to stability. There are two other functional responses. The Type II, which has saturating consumption rate and generates *inverse* density dependence, and the Type III, which has accelerating consumption rate with prey density, and thus generates increasing mortality in the prey with increasing prey density, and thus density dependence. It is only Type III functional responses that are linked to consumers/predators *stabilising* their prey populations. It is also a pretty rare functional response!
+-   the consumer mortality rate is also constant and thus density independent.
 
 ### How does this relate to the Bioenergetic Food Web Model?
 
-The complex model of consumer - resource interactions that is represented by the `BEFW` model has at it's heart two equations: one for producers and one for consumers.  So at it's heart, it is not too different in structure to the model above! However, the differences, spelled out in this [paper](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.12713) and this [paper](https://indico.ictp.it/event/a08145/session/28/contribution/17/material/0/4.pdf), are 
+The complex model of consumer - resource interactions that is represented by the `BEFW` model has at it's heart two equations: one for producers and one for consumers. So at it's heart, it is not too different in structure to the model above! However, the differences, spelled out in @delmas2017, are
 
-- the parameters are functions of body size
-- because of this, we can expand the number of resource and consumer equations for multiple values of body size
-- this creates a potentially big system of equations, instead of just 2.
+-   the parameters are functions of body size
+-   because of this, we can expand the number of resource and consumer equations for multiple values of body size
+-   this creates a potentially big system of equations, instead of just 2.
 
 However, and this is important, the process of solving these equations, whether it is two of them, or 100 of them, is essentially what we are introducing below. If you were to look inside of the `BEFW` model, you would see the same functions and structure as we introduce here.
 
 #### The Three Steps For Simulating Food Web Dynamics
 
-There are 3 major steps involved in constructing and solving this model in Julia (these happen to be the same three steps in all programming languages, including R where the `deSolve` package accomplishes much of this same functionality): 
+There are 3 major steps involved in constructing and solving this model in Julia (these happen to be the same three steps in all programming languages, including R where the `deSolve` package accomplishes much of this same functionality):
 
-1. Define a function for your model (i.e. transform the above differential equations into a function that can be read by the solver). This function tells the solver how the variables of interest (here $R$ and $C$) change over time.
-2. Define the problem. Here, the problem is defined by the function, the parameters ($r$, $\alpha$, $e$ and $m$), the initial conditions and the timespan of the simulation. In this step you provide the solver with all the details it needs to find the solution.
-3. Solve!
+1.  Define a function for your model (i.e. transform the above differential equations into a function that can be read by the solver). This function tells the solver how the variables of interest (here $R$ and $C$) change over time.
+2.  Define the problem. Here, the problem is defined by the function, the parameters ($r$, $\alpha$, $e$ and $m$), the initial conditions and the timespan of the simulation. In this step you provide the solver with all the details it needs to find the solution.
+3.  Solve!
 
 #### Step 1. Define the function
+
 Here we construct a function for our model. The function needs to accept the following:
 
-- `du` (derivatives) - a vector of changes in abundance for each species 
-- `u` (values) - a vector of abundance for each species
-- `p` (parameters) - a list of parameter values 
-- `t` (time) - timespan
-
+-   `du` (derivatives) - a vector of changes in abundance for each species
+-   `u` (values) - a vector of abundance for each species
+-   `p` (parameters) - a list of parameter values
+-   `t` (time) - timespan
 
 ```{julia}
 function LV_model(du,u,p,t)
@@ -108,15 +109,13 @@ p = (
 
 Here, we have chosen to define `p` as a named tuple (similar to a list in R). A vector or dictionary would also work, however, named tuples are advantageous because they allow us to use explicit names and are unmutable meaning that once it's created you can't change it.
 
-- **Initial values:**
-For simplicity, we start with $R = C = 1$:
+-   **Initial values:** For simplicity, we start with $R = C = 1$:
 
 ```{julia}
 u0 = [1.0; 1.0]
 ```
 
-- **Timespan:**
-
+-   **Timespan:**
 
 ```{julia}
 tspan = (0.0,100.0) # you have to use a Pair (tuple with 2 values) of floating point numbers.
@@ -130,10 +129,9 @@ prob = ODEProblem(LV_model, u0, tspan, p)
 
 #### Step 3. Solve
 
-To solve the problem, we pass the `ODEProblem` object to the solver. 
+To solve the problem, we pass the `ODEProblem` object to the solver.
 
 Here we have chosen to use the default algorithm because it's a simple problem, however there are several available - see [here](https://diffeq.sciml.ai/dev/solvers/ode_solve/) for more information. These two final steps (define and solve the problem) are analogous to using the `deSolve` package in R."
-
 
 ```{julia}
 #| output: false
@@ -145,7 +143,6 @@ The solver produces 2 objects: `sol.t` and `sol.u` that respectively store the t
 #### Step 4. Visualise the outputs"
 
 Once the problem has been solved, the results can be explored and plotted. In fact, the `DifferentialEquations.jl` package has its own built in plotting recipe that provides a very fast and convenient way of visualising the abundance of the two species through time:
-
 
 ```{julia}
 plot(sol, 
@@ -161,13 +158,18 @@ One thing to note here, when plotting in Julia you don't need to separate label 
 
 #### Step 5. Play some games
 
-Now that you see how this works, perhaps you can do a bit of an experiment by varying things in the `p = ` (parameters) part of the code?
+Now that you see how this works, perhaps you can do a bit of an experiment by varying things in the `p =` (parameters) part of the code?
 
-- Can you increase the number of time steps?
-- What happens when you increase `K`?
-- What happens when you increase or decrease `growthrate`?
-- What happens when you change the `ingestrate`
+-   Can you increase the number of time steps?
+-   What happens when you increase `K`?
+-   What happens when you increase or decrease `growthrate`?
+-   What happens when you change the `ingestrate`
 
 #### EXTRA CREDIT
 
 If you are really keen.... how about trying to run the model in a loop over 3 values of `growthrate`, collect the final population size of the consumer and resource in a data frame with three columns (`growthrate`, finalCons, finalRes), and plot these values?
+
+## References
+
+::: {#refs}
+:::
