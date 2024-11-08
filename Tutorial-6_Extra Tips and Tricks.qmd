@@ -6,7 +6,6 @@ format:
     html:
         embed-resources: true
 title-block-banner: true
-jupyter: julia-1.8
 ---
 
 Some quick tips that we've learnt the hard way...

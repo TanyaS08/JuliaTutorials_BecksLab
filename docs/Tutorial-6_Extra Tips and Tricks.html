@@ -4868,15 +4868,15 @@ vertical-align: -.125em;
 <li>Toggle word wrap via <code>View&gt;Toggle Word Wrap</code> or <code>alt-Z</code></li>
 <li>Red wavy line under code in your script = <em>error in code</em></li>
 <li>Blue wavy line under code in your script = <em>possible error in code</em></li>
-<li>Errors and possible erros can be viewed in the PROBLEMS section of the REPL</li>
-<li>You can view your current variables (similar to the top right hand panel in RStudio) by clickling on the Julia explorer: Julia workspace symbol in the activity bar (three circles). You can then look at them in more detail by clicking the sideways arrow (when allowed).</li>
+<li>Errors and possible errors can be viewed in the PROBLEMS section of the REPL</li>
+<li>You can view your current variables (similar to the top right hand panel in RStudio) by clicking on the Julia explorer: Julia workspace symbol in the activity bar (three circles). You can then look at them in more detail by clicking the sideways arrow (when allowed).</li>
 </ol>
 <section id="copying-versus-deep-copying--" class="level3">
 <h3 class="anchored" data-anchor-id="copying-versus-deep-copying--">COPYING versus DEEP COPYING :-)</h3>
 <ol start="8" type="1">
 <li>Julia has a strange copying aspect where if a=b, any change in b will automatically cause the same change in a. For example, let’s make an array of three numbers:</li>
 </ol>
-<div id="0b16397e" class="cell" data-execution_count="1">
+<div id="6a6b758f" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>aa <span class="op">=</span> [<span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
 <pre><code>3-element Vector{Int64}:
@@ -4886,7 +4886,7 @@ vertical-align: -.125em;
 </div>
 </div>
 <p>Here we make a copy of aa and call it bb.</p>
-<div id="814c1793" class="cell" data-execution_count="2">
+<div id="13f8110b" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bb <span class="op">=</span> aa</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(bb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -4894,7 +4894,7 @@ vertical-align: -.125em;
 </div>
 </div>
 <p>Now, we replace the second element of bb with the value 41.</p>
-<div id="4c6a9c04" class="cell" data-execution_count="3">
+<div id="abe8acc7" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>bb[<span class="fl">2</span>] <span class="op">=</span> <span class="fl">41</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>bb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
@@ -4905,7 +4905,7 @@ vertical-align: -.125em;
 </div>
 </div>
 <p>The default behaviour of <code>=</code> in Julia is to <em>UPDATE</em> any copy of the array, also:</p>
-<div id="c4f90bb8" class="cell" data-execution_count="4">
+<div id="9e124d29" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>aa</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>3-element Vector{Int64}:
@@ -4916,7 +4916,7 @@ vertical-align: -.125em;
 </div>
 <p>Whoa… that’s not what we expect, though it’s pretty cool. This approach is advantageous because it lets Julia save memory, however, it is not ideal.</p>
 <p>To remedy this, and create copies that don’t update their parent or other offspring, we can force c to be an independent copy of a using the <code>deepcopy</code> function:</p>
-<div id="ce845a16" class="cell" data-execution_count="5">
+<div id="4c98c15f" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cc <span class="op">=</span> <span class="fu">deepcopy</span>(aa)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>3-element Vector{Int64}:
@@ -4925,7 +4925,7 @@ vertical-align: -.125em;
   3</code></pre>
 </div>
 </div>
-<div id="dc2b204b" class="cell" data-execution_count="6">
+<div id="6519c5f3" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cc[<span class="fl">3</span>] <span class="op">=</span> <span class="fl">101</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>aa,cc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="7">
@@ -4933,8 +4933,40 @@ vertical-align: -.125em;
 </div>
 </div>
 <ol start="9" type="1">
-<li>You can view a <code>.csv</code> or <code>.txt</code> file by clicking on a file name in the project directory (left panel) - this opens a viewing window. CSV’s also have a built in ‘Preview’ mode - try using right click&gt;Open Preview on a <code>.csv</code> file and check it out.</li>
+<li><p>You can view a <code>.csv</code> or <code>.txt</code> file by clicking on a file name in the project directory (left panel) - this opens a viewing window. CSV’s also have a built in ‘Preview’ mode - try using right click&gt;Open Preview on a <code>.csv</code> file and check it out.</p></li>
+<li><p>Docstrings are a supplement to <code>#</code>-based comments for documenting your workflow. Basically, any string that appears just before an object will be interpreted as documenting it. When you use a docstring it is possible to call that description using help (<code>?</code> in the REPL) or hovering over the object in VSCode. This can be very useful when you start declaring variables or building your own functions.</p></li>
 </ol>
+<div id="99a2da51" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;a wonderfully documented and described variable&quot;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> <span class="fl">101</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>var</code></pre>
+</div>
+</div>
+<p>you can (should) also do this with functions</p>
+<div id="a4f0f33a" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="st">    _rategradient(∂X, ∂Y)</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="st">Returns the rate of change in units of the values stored in the grid, and the</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="st">angle of the change in wind direction, *i.e.* an angle of 180 means that the</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="st">value is increasing *from* the south. When both ∂X and ∂Y are equal to 0, the</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="st">angle is assumed to be 0.</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">_rategradient</span>(∂X<span class="op">::</span><span class="dt">T</span>, ∂Y<span class="op">::</span><span class="dt">T</span>) <span class="kw">where</span> {T <span class="op">&lt;:</span><span class="dt"> Number</span>}</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ∂X <span class="op">==</span> ∂Y <span class="op">==</span> <span class="fl">0.0</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (<span class="fl">0.0</span>, <span class="fl">0.0</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    m <span class="op">=</span> <span class="fu">sqrt</span>(∂X<span class="op">^</span><span class="fl">2</span> <span class="op">+</span> ∂Y<span class="op">^</span><span class="fl">2</span>)</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    Δ <span class="op">=</span> ∂X <span class="op">&gt;=</span> <span class="fl">0.0</span> ? <span class="fl">0.0</span> <span class="op">:</span> <span class="fl">180.0</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    θ <span class="op">=</span> <span class="fu">rad2deg</span>(<span class="fu">atan</span>(∂X, ∂Y)) <span class="op">+</span> Δ</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    θ <span class="op">=</span> ∂X <span class="op">&gt;</span> <span class="fl">0.0</span> ? θ <span class="op">+</span> <span class="fl">180.0</span> <span class="op">:</span> θ</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (m, θ)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a><span class="kw">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>_rategradient</code></pre>
+</div>
+</div>
 
 
 </section>

@@ -6,7 +6,6 @@ format:
     html:
         embed-resources: true
 title-block-banner: true
-jupyter: julia-1.8
 ---
 
 This section of the tutorials initiates you into using the Bioenergetic Food Web Model.

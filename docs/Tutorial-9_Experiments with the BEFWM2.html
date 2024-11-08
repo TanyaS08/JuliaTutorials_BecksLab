@@ -4913,7 +4913,7 @@ window.Quarto = {
 <section id="getting-setup" class="level3">
 <h3 class="anchored" data-anchor-id="getting-setup">Getting Setup</h3>
 <p>As with our previous exercises, we need to have a few packages that allow making networks, simulating them and collecting the data</p>
-<div id="9a035099" class="cell" data-execution_count="1">
+<div id="139e8ac0" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">DataFrames</span>, <span class="bu">Plots</span>, <span class="bu">Random</span>, <span class="bu">Distributions</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">using</span> <span class="bu">EcologicalNetworksDynamics</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -4923,7 +4923,7 @@ window.Quarto = {
 <p>One of the tricks to doing experiments is learning how to run a loop. Julia is super-fast with running loops. This is a bit different to R, which has a bad rep for loops. It’s not terrible. But Julia is built to do loops fast.</p>
 <p>What we will do here is build a simple loop that makes 3 networks, each with a different species richness, but the same connectance.</p>
 <p>Note here that we introduce the use of the argument <code>tol_C</code>. Because the <code>niche model</code> produces networks based on probability theory (it uses the beta-distribution), the connectance we ask for is not always the connectance we get. The <code>tol_C</code> argument ensure that connectance is within a <em>tolerance</em> range - in this case, having asked for <code>C = 0.2</code> and a <code>tol_C = 0.01</code> we will get <code>0.19 &lt; C &lt; 2.01</code>. This is like embedding a while loop within the <code>FoodWeb</code> function! We note too that the function <code>nichemodel</code> can take a value of <code>L</code> instead of <code>C</code>, and there is an associated <code>tol_L</code> argument for this choice too.</p>
-<div id="043957a3" class="cell" data-execution_count="2">
+<div id="e69119a8" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">Random</span>.<span class="fu">seed!</span>(<span class="fl">12325</span>) <span class="co"># ensures your network and this one are the same</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> [<span class="fl">10</span>,<span class="fl">20</span>,<span class="fl">30</span>] <span class="co"># define the number of species</span></span>
@@ -4941,7 +4941,7 @@ window.Quarto = {
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Great. Let’s see if we got what we expected in nets.</p>
-<div id="ae12ca16" class="cell" data-execution_count="3">
+<div id="c0d46978" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>nets</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
 <pre><code>3-element Vector{Any}:
@@ -4952,7 +4952,7 @@ window.Quarto = {
 </div>
 <p>Magnificent, we have three networs and that’s a win. We also see that they are each for a different and appropriate S. Win no. 2. We can actually now check to see what the connectances actually are. Again, we’ll use a loop, <code>println</code> and introduce you to the details of the <code>FoodWeb</code> object.</p>
 <p>First, let’s look at one of the networks.</p>
-<div id="f64136ff" class="cell" data-execution_count="4">
+<div id="0eddb9d7" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>nets[<span class="fl">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <pre><code>blueprint for Foodweb with 22 trophic links:
@@ -4976,7 +4976,7 @@ window.Quarto = {
 <p>Now, recall that we can look specifically at the matrix by using <code>nets[1].A</code> which grabs the <code>A</code> part. We introduce here the function <code>sum</code>. As in <strong>R</strong>, <code>sum()</code> does what it says on the tin: for a vector, it addes up all the numbers and for a matrix, it does the same! In our case here, when <code>sum()</code> is applied to a matrix of ones and zeros, it counts all the 1’s…. thus is the estimate of the number of links in the community.</p>
 <p>Finally, we note (again?) that <code>size</code> applied to the network returns two numbers - the number of rows and the number of columns. For our networks, the matrix is square. So grabbing one of these (rows = [1]) and squaring it delivers our ‘potential number of links’ (e.g. <span class="math inline">\(species^2\)</span>).</p>
 <p>We can put that all together here to define connectance as <span class="math inline">\(Con = links/S^2\)</span>. Do be careful to watch where you put the various <code>[]</code>’s. One of them is about the <em>index</em> (i.e. <code>[i]</code>) and the other is about the dimension (<code>[1]</code>) of the matrix.</p>
-<div id="6ea3c18f" class="cell" data-execution_count="5">
+<div id="f820fb03" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">println</span>(<span class="fu">sum</span>(nets[i].A)<span class="op">/</span><span class="fu">size</span>(nets[i].A)[<span class="fl">1</span>]<span class="op">^</span><span class="fl">2</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">end</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -4991,7 +4991,7 @@ window.Quarto = {
 <p>There is another way to make this set of networks. Here we use a <code>while</code> loop to create 3 networks with the same species richness and connectance. We might need to do this to generate <em>replicates</em>. This is a good exercise with the <strong>niche model</strong> as it reminds you that it is a probabilistic tool… you can get several networks with the same S and C, but the links will be in slightly different places.</p>
 <p><code>while</code> loops work on conditions… for example, if we want three networks, we could ask that the loop keep working to make the networks until we have three. To do this, we need a <em>monitoring</em> variable that lets us assess where we are against our target.</p>
 <p>Lets see how to do that.</p>
-<div id="2d031483" class="cell" data-execution_count="6">
+<div id="016cbe80" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># how many replicates do we want?</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>reps <span class="op">=</span> <span class="fl">3</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5016,7 +5016,7 @@ window.Quarto = {
 <blockquote class="blockquote">
 <p>NOTE: the presentation of the matrix is very specific here… the rows correspond to the predators and the columns the resources. Obstensibly, the ranking is by body size, so small things are at the upper left. This view shows that big things tend to eat small and big things, while small things eat small. Historically, the reflection (pivot around the diagnol) has also been used, where the predators are the columns and the resources the rows. This lead to a ‘feature’ of real and theoretical networks aligning, call <code>upper triangularity</code>. In this latter presentation, most of the links would be in the upper triangle. In the current presentation, the links are in the lower triangle. So we can just call the feature <code>triangularity</code>. The niche model reproduces this triangularity.</p>
 </blockquote>
-<div id="9832181e" class="cell" data-execution_count="7">
+<div id="a8dfacc5" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>networks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>3-element Vector{Any}:
@@ -5025,7 +5025,7 @@ window.Quarto = {
  blueprint for Foodweb with 62 trophic links</code></pre>
 </div>
 </div>
-<div id="e05db0c6" class="cell" data-execution_count="8">
+<div id="0a5143a9" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>networks[<span class="fl">1</span>].A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
 <pre><code>20×20 SparseArrays.SparseMatrixCSC{Bool, Int64} with 55 stored entries:
@@ -5036,7 +5036,7 @@ window.Quarto = {
 ⎣⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⎦</code></pre>
 </div>
 </div>
-<div id="b3c5f8c4" class="cell" data-execution_count="9">
+<div id="3a5a796a" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>networks[<span class="fl">2</span>].A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="10">
 <pre><code>20×20 SparseArrays.SparseMatrixCSC{Bool, Int64} with 63 stored entries:
@@ -5047,7 +5047,7 @@ window.Quarto = {
 ⎣⠀⠀⠀⠀⠀⠀⠀⠀⠐⠛⎦</code></pre>
 </div>
 </div>
-<div id="86e41790" class="cell" data-execution_count="10">
+<div id="29bd575c" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>networks[<span class="fl">3</span>].A</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="11">
 <pre><code>20×20 SparseArrays.SparseMatrixCSC{Bool, Int64} with 62 stored entries:
@@ -5066,7 +5066,7 @@ window.Quarto = {
 <section id="step-1-create-the-collecting-data-frame" class="level4">
 <h4 class="anchored" data-anchor-id="step-1-create-the-collecting-data-frame">Step 1: Create the collecting data frame</h4>
 <p>First, we create the holding pen for our information. We’ll construct a data frame to collect five pieces of information: the network id (1,2 or 3), species richness at the start (our initial S), species richness at the end, total biomass at the end and stability at the end.</p>
-<div id="53dd3da8" class="cell" data-execution_count="11">
+<div id="c677e9ad" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>outputs <span class="op">=</span> <span class="fu">DataFrame</span>(Network <span class="op">=</span> [], Init_Rich <span class="op">=</span> [], Fin_Rich <span class="op">=</span> [], Tot_biomass <span class="op">=</span> [], Shannon_dic <span class="op">=</span> [])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="12">
 <div><div style="float: left;"><span>0×5 DataFrame</span></div><div style="clear: both;"></div></div><div class="data-frame" style="overflow-x: scroll;">
@@ -5099,7 +5099,7 @@ window.Quarto = {
 <section id="step-2-use-the-pre-defined-networks" class="level4">
 <h4 class="anchored" data-anchor-id="step-2-use-the-pre-defined-networks">Step 2: use the pre-defined networks</h4>
 <p>We can use our <code>nets</code> object from above now. Each of these networks has a different species richness.</p>
-<div id="31113188" class="cell" data-execution_count="12">
+<div id="9f867c86" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># prep: define size of network</span></span>
@@ -5144,7 +5144,7 @@ This is network: 3with species richness = 30
 </div>
 </div>
 <p>Amazing. Let’s see if what we wanted collected has ended up in our data frame. Wonderful! Splendiferous. Fantabulous.</p>
-<div id="d63ee86d" class="cell" data-execution_count="13">
+<div id="4e81e1db" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">println</span>(outputs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>3×5 DataFrame
@@ -5160,7 +5160,7 @@ This is network: 3with species richness = 30
 <section id="dissecting-more-from-simulate" class="level4">
 <h4 class="anchored" data-anchor-id="dissecting-more-from-simulate">Dissecting more from simulate</h4>
 <p>Note the details on extinctions that comes from a model run. For example, let’s revisit our <code>sim_niche</code> object (you won’t necessarily have to re-run this if you are working in one big script)</p>
-<div id="8b10464b" class="cell" data-execution_count="14">
+<div id="44467678" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>S <span class="op">=</span> <span class="fl">20</span>; <span class="co"># define the number of species</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>C <span class="op">=</span> <span class="fl">0.2</span>; <span class="co"># define the connectance (complexity) of the network</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -5239,17 +5239,17 @@ u: 51-element Vector{Vector{Float64}}:
 </div>
 </div>
 <p>We’ve constructed a helper function to get information on which species go extinct and when they do.</p>
-<div id="4432535f" class="cell" data-execution_count="15">
+<div id="b5cfdc48" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># collect and organise extinctions</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>extinctions <span class="op">=</span> <span class="fu">get_extinct_species</span>(sim_niche)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This is a <code>Dict</code> object. The numbers on the left of the <code>=&gt;</code> are known as the <code>keys</code> and the numbers on the right are <code>values</code>. We can create a mini- data frame out of this with the following code. <code>key</code> and <code>values</code> are actually <em>extractor</em> functions and <code>collect</code> is translating the extracted information into a vector.</p>
-<div id="8d6783c4" class="cell" data-execution_count="16">
+<div id="b095adfd" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># create a data frame of extinctions</span></span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>ee1 <span class="op">=</span> <span class="fu">DataFrame</span>(who <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">keys</span>(extinctions)), when <span class="op">=</span> <span class="fu">collect</span>(<span class="fu">values</span>(extinctions)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can try and add this information to the plot. For the time being, we’ll focus on adding the times that each of these species goes extinct to our figure. To do this we need to access the extinction time column (<code>when</code>), add a bit of noise/jitter so that times that are really close together can be seen on our x-axis, and then plot these as points with coordinates <code>x = when</code> and <code>y = 0</code>.</p>
-<div id="02af9f00" class="cell" data-execution_count="17">
+<div id="d95429bf" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode julia code-with-copy"><code class="sourceCode julia"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add some jitter for close together events</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>exts <span class="op">=</span> ee1[<span class="op">:</span>,<span class="fl">2</span>] <span class="op">.+</span><span class="fu">rand</span>.()</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
